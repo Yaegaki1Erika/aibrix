@@ -53,3 +53,5 @@ benchmarks/*.sh
 # simulator cache and output
 development/simulator/simulator_output
 development/simulator/cache
+python-local.tar
+python-local.tar
