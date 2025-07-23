@@ -64,22 +64,22 @@ patches:
 
 images:
   - name: controller
-    newName: aibrix/controller-manager
-    newTag: nightly
+    newName: iaas-gpu-cn-beijing.cr.volces.com/serving/controller-manager
+    newTag: 47dffef9910f4dcbdcde8f7b758d8cd5107985ee
   - name: gateway-plugins
-    newName: aibrix/gateway-plugins
-    newTag: nightly
+    newName: iaas-gpu-cn-beijing.cr.volces.com/serving/gateway-plugins
+    newTag: 47dffef9910f4dcbdcde8f7b758d8cd5107985ee
   - name: metadata-service
-    newName: aibrix/metadata-service
-    newTag: nightly
+    newName: iaas-gpu-cn-beijing.cr.volces.com/serving/metadata-service
+    newTag: 47dffef9910f4dcbdcde8f7b758d8cd5107985ee
   - name: aibrix/runtime
-    newName: aibrix/runtime
-    newTag: nightly
+    newName: iaas-gpu-cn-beijing.cr.volces.com/serving/runtime
+    newTag: 47dffef9910f4dcbdcde8f7b758d8cd5107985ee
   - name: redis
-    newName: redis
+    newName: docker.m.daocloud.io/library/redis
     newTag: latest
   - name: busybox
-    newName: busybox
+    newName: docker.m.daocloud.io/library/busybox
     newTag: stable
 
 labels:

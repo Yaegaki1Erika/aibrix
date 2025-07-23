@@ -50,6 +50,8 @@ func main() {
 	flag.StringVar(&metricsAddr, "metrics-bind-address", ":8080", "The address the metric endpoint binds to.")
 	klog.InitFlags(flag.CommandLine)
 	defer klog.Flush()
+	// _ = flag.Set("v", "5")
+
 	flag.Parse()
 
 	redisClient := utils.GetRedisClient()
@@ -77,6 +79,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	klog.Infof("=== My new code is running ===")
 
 	cache.InitForGateway(config, stopCh, redisClient, routing.ModelRouterFactory)
 

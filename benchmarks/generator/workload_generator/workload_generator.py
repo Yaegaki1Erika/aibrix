@@ -175,7 +175,8 @@ def generate_constant(prompt_file_path: str,
         input_token_len_dist = []
     if output_len != None:
         output_token_len_dist = []
-    output_token_len_dist = None
+    # why none
+    # output_token_len_dist = None
     while ts < duration_ms:
         rps_dist.append(qps)
         if input_len != None:

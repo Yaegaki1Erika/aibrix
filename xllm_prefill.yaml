@@ -1,0 +1,157 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    model.aibrix.ai/name: deepseek-r1-prefill # Note: The label value `model.aibrix.ai/name` here must match with the service name.
+  name: deepseek-r1-prefill
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      model.aibrix.ai/name: deepseek-r1-prefill
+  template:
+    metadata:
+      labels:
+        model.aibrix.ai/name: deepseek-r1-prefill
+    spec:
+      hostNetwork: true
+      containers:
+        - command:
+            - /bin/bash
+            - -c
+          args:
+          - |
+            cd /app/xllm && ./private_xllm.bin --model-dir /data/models/DeepSeek-R1-ENC-xLLM --env-path /app/xllm/prefill_enc.env --driver-type splitwise_prefill --num-server-procs 4 --port 62000
+          image: iaas-gpu-cn-beijing.cr.volces.com/serving/xllm:private_xllm_th24_cu124_xperf_0609
+          imagePullPolicy: IfNotPresent
+          name: xllm-decode
+          ports:
+            - containerPort: 80
+              protocol: TCP
+            - containerPort: 62000
+              protocol: TCP
+            - containerPort: 62001
+              protocol: TCP
+            - containerPort: 62002
+              protocol: TCP
+            - containerPort: 8080
+              name: metrics
+              protocol: TCP
+          env:
+            - name: PYTHONPATH
+              value: /app/xllm
+            - name: LD_LIBRARY_PATH
+              value: /app/xllm
+            - name: XLLM_MODEL_MP_SIZE
+              value: "8"
+            - name: XLLM_PARALLEL_LOCAL_WORLD_SIZE
+              value: "8"
+            - name: XLLM_PARALLEL_TP_SIZE
+              value: "8"
+            - name: VETURBORPC_LOCAL_ADDR
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: XLLM_MODEL_NAME
+              value: deepseek-r1
+            - name: XLLM_MODEL_VERSION
+              value: "250120"
+            - name: XPERF_TUNER_CONFIG_LOAD_PATH
+              value: /data/models/DeepSeek-R1-ENC-xLLM/saved_model/gemm_config
+            - name: XLLM_DRAFT_MODEL_MODEL_DIR
+              value: /data/models/DeepSeek-R1-DRAFT-ENC-xLLM
+
+          resources:
+            limits:
+              nvidia.com/gpu: "8"
+            requests:
+              nvidia.com/gpu: "8"
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: 80
+          #     scheme: HTTP
+          #   failureThreshold: 3
+          #   periodSeconds: 5
+          #   successThreshold: 1
+          #   timeoutSeconds: 1
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: 80
+          #     scheme: HTTP
+          #   failureThreshold: 5
+          #   periodSeconds: 5
+          #   successThreshold: 1
+          #   timeoutSeconds: 1
+          # startupProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: 80
+          #     scheme: HTTP
+          #   failureThreshold: 30
+          #   periodSeconds: 5
+          #   successThreshold: 1
+          #   timeoutSeconds: 1
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: shm
+              mountPath: /dev/shm
+            - name: enc-model
+              mountPath: /data/models/DeepSeek-R1-ENC-xLLM
+            - name: draft-model
+              mountPath: /data/models/DeepSeek-R1-DRAFT-ENC-xLLM
+            - name: license
+              mountPath: /app/xllm/license.lic
+              readOnly: true
+            - name: envfile
+              mountPath: /app/xllm/prefill_enc.env
+              readOnly: true
+      volumes:
+        - name: shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 128Gi
+        - name: enc-model
+          hostPath:
+            path: /data01/models/DeepSeek-R1-ENC-xLLM
+        - name: draft-model
+          hostPath:
+            path: /data01/models/DeepSeek-R1-DRAFT-ENC-xLLM
+        - name: license
+          hostPath:
+            path: /data01/license.lic
+            type: File  # 如果文件是必需的，确保路径存在
+        - name: envfile
+          hostPath:
+            path: /data01/prefill_enc.env
+            type: File  
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: deepseek-r1-prefill # Note: The Service name must match the label value `model.aibrix.ai/name` in the Deployment
+  namespace: default
+spec:
+  ports:
+    - name: serve
+      port: 80
+      targetPort: 80
+    - name: metrics
+      port: 8080
+      targetPort: 8080
+    - name: bin
+      port: 62000
+      targetPort: 62000
+    - name: driver
+      port: 62001
+      targetPort: 62001
+    - name: kv-cache
+      port: 62002
+      targetPort: 62002
+  selector:
+    model.aibrix.ai/name: deepseek-r1-prefill
+  type: NodePort

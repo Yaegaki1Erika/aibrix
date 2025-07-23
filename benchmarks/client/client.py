@@ -186,9 +186,17 @@ async def send_request_batch(client: openai.AsyncOpenAI,
 
         response_time = asyncio.get_event_loop().time()
         latency = response_time - dispatch_time
-        prompt_tokens = response.usage.prompt_tokens
-        output_tokens = response.usage.completion_tokens
-        total_tokens = response.usage.total_tokens
+
+        # prompt_tokens = response.usage.prompt_tokens
+        # output_tokens = response.usage.completion_tokens
+        # total_tokens = response.usage.total_tokens
+        # throughput = output_tokens / latency
+        # output_text = response.choices[0].message.content
+
+        #格式问题
+        prompt_tokens = response.usage.prompt_len
+        output_tokens = response.usage.completion_len
+        total_tokens = response.usage.total_len
         throughput = output_tokens / latency
         output_text = response.choices[0].message.content
 

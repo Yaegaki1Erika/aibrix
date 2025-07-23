@@ -1,9 +1,12 @@
 # There is a python upstream issue and we switch 3.11 to 3.11.11, check aibrix/issues/959 for more details.
-ARG PYTHON_VERSION=3.11.11
-ARG BASE_IMAGE=python:${PYTHON_VERSION}-slim-bookworm
+# ARG PYTHON_VERSION=3.11.11
+# ARG BASE_IMAGE=python:${PYTHON_VERSION}-slim-bookworm
 
-# Builder stage
-FROM ${BASE_IMAGE} AS builder
+# # Builder stage
+# FROM ${BASE_IMAGE} AS builder
+FROM m.daocloud.io/docker.io/library/python:3.11.11-slim-bookworm AS builder
+
+
 
 WORKDIR /app
 
@@ -27,7 +30,8 @@ RUN poetry config virtualenvs.create false \
     && poetry build -f wheel
 
 # Final stage
-FROM ${BASE_IMAGE}
+# FROM ${BASE_IMAGE}
+FROM m.daocloud.io/docker.io/library/python:3.11.11-slim-bookworm
 
 WORKDIR /app
 

@@ -1,14 +1,17 @@
 # Build the manager binary
-FROM golang:1.22 AS builder
+# FROM golang:1.22 AS builder
+FROM m.daocloud.io/docker.io/library/golang:1.22 as builder
 ARG TARGETOS
 ARG TARGETARCH
 
 WORKDIR /workspace
 # Copy the Go Modules manifests
+ENV GOPROXY=https://goproxy.cn,direct
 COPY go.mod go.mod
 COPY go.sum go.sum
 # cache deps before building and copying source so that we don't need to re-download as much
 # and so that source changes don't invalidate our downloaded layer
+ENV GOPROXY=https://goproxy.cn,direct
 RUN go mod download
 
 # Copy the go source

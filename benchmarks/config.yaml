@@ -42,7 +42,7 @@ dataset_configs:
 dataset_file: ${dataset_dir}/${prompt_type}.jsonl
 workload_type: "constant"  # Options: constant, synthetic, constant, azure, mooncake
 interval_ms: 1000
-duration_ms: 10000
+duration_ms: 200000
 workload_dir: "./output/workload/${workload_type}"
 
 workload_configs:
@@ -53,10 +53,10 @@ workload_configs:
     max_concurrent_sessions: 2
 
   constant:
-    target_qps: 1
-    target_prompt_len: null
-    target_completion_len: null
-    max_concurrent_sessions: 2
+    target_qps: 2
+    target_prompt_len: 3500
+    target_completion_len: 1500
+    max_concurrent_sessions: 64
 
   stat:
     traffic_file: ${stat_describe_traffic}
@@ -83,10 +83,10 @@ workload_file: "./output/workload/${workload_type}/workload.jsonl"
 client_output: "./output/client_output"
 endpoint: "http://localhost:8888"
 api_key: ${API_KEY}  # You might want to inject this securely via environment variables
-target_model: "llama-3-8b-instruct"  # Or "deepseek-llm-7b-chat"
+target_model: "deepseek-llm-7b-chat"  # Or "deepseek-llm-7b-chat"
 time_scale: 1.0
 routing_strategy: "random" 
-streaming_enabled: true # Options: true, false
+streaming_enabled: false # Options: true, false
 output_token_limit: 128
 timeout_second: 60.0
 max_retries: 0

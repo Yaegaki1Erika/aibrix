@@ -1,0 +1,20 @@
+INFO:root:Loading configuration from config.yaml
+WARNING:root:Loaded Config: {'tokenizer': 'deepseek-ai/deepseek-llm-7b-chat', 'dataset_dir': './output/dataset', 'prompt_type': 'synthetic_multiturn', 'dataset_configs': {'synthetic_multiturn': {'shared_prefix_length': 0, 'prompt_length': 80, 'prompt_std': 472, 'num_turns': 3.55, 'num_turns_std': 2.89, 'num_sessions': 1000, 'num_sessions_std': 1}, 'synthetic_shared': {'prompt_length': '3997,5868,2617', 'prompt_std': '17,28,1338', 'shared_prop': '0.95,0.97,0.03', 'shared_prop_std': '0.00001,0.00001,0.00001', 'num_samples': '12,8,79', 'num_prefix': '1,1,1', 'num_dataset_configs': 3}, 'sharegpt': {'target_dataset': '/tmp/ShareGPT_V3_unfiltered_cleaned_split.json'}, 'client_trace': {'trace': '${client_trace_path}'}}, 'dataset_file': './output/dataset/synthetic_multiturn.jsonl', 'workload_type': 'constant', 'interval_ms': 1000, 'duration_ms': 200000, 'workload_dir': './output/workload/constant', 'workload_configs': {'synthetic': {'traffic_file': 'scenarios/autoscaling/workload-configs/predefined/traffic-configs//HighSlow.json', 'prompt_len_file': 'scenarios/autoscaling/workload-configs/predefined/prompt-len-configs/HighSlow.json', 'completion_len_file': 'scenarios/autoscaling/workload-configs/predefined/completion-len-configs/HighSlow.json', 'max_concurrent_sessions': 2}, 'constant': {'target_qps': 2, 'target_prompt_len': 3500, 'target_completion_len': 1500, 'max_concurrent_sessions': 64}, 'stat': {'traffic_file': '${stat_describe_traffic}', 'prompt_len_file': '${stat_describe_prompt_len}', 'completion_len_file': '${stat_describe_completion_len}', 'stat_trace_type': 'cloudide', 'qps_scale': 1.0, 'output_scale': 1.0, 'input_scale': 1.0}, 'azure': {'trace_path': '/tmp/AzureLLMInferenceTrace_conv.csv'}, 'mooncake': {'trace_path': '/tmp/Mooncake_trace.jsonl', 'trace_type': 'conversation'}}, 'workload_file': './output/workload/constant/workload.jsonl', 'client_output': './output/client_output', 'endpoint': 'http://localhost:8888', 'api_key': '${API_KEY}', 'target_model': 'deepseek-llm-7b-chat', 'time_scale': 1.0, 'routing_strategy': 'random', 'streaming_enabled': False, 'output_token_limit': 128, 'timeout_second': 60.0, 'max_retries': 0, 'trace_output': './output/trace_analysis', 'goodput_target': 'tpot:0.5'}
+INFO:root:========== Starting Benchmark ==========
+INFO:root:Analyzing trace output...
+INFO:root:Running analysis with args: Namespace(trace='./output/client_output/output.jsonl', output='./output/trace_analysis', goodput_target='tpot:0.5')
+WARNING:root:End-to-End Latency (s) Statistics: Total = 7237.5659 Average = 3.7578, Median = 3.7290, 99th Percentile = 4.5267
+WARNING:root:Throughput (per request, toks/s) Statistics: Total = 66152.9202 Average = 34.3473, Median = 34.3253, 99th Percentile = 41.8006
+WARNING:root:Tokens per Second Statistics: Total = 567461.9598 Average = 294.6324, Median = 294.8958, 99th Percentile = 358.9591
+WARNING:root:Request Prompt Tokens Statistics: Total = 1868202.0000 Average = 969.9907, Median = 969.0000, 99th Percentile = 987.0000
+WARNING:root:Request Output Tokens Statistics: Total = 246528.0000 Average = 128.0000, Median = 128.0000, 99th Percentile = 128.0000
+WARNING:root:Request Total Tokens Statistics: Total = 2114730.0000 Average = 1097.9907, Median = 1097.0000, 99th Percentile = 1115.0000
+WARNING:root:Time to First Token (TTFT) Statistics: Total = 0.0000 Average = 0.0000, Median = 0.0000, 99th Percentile = 0.0000
+WARNING:root:Time per Output Token (TPOT) Statistics: Total = 0.0000 Average = 0.0000, Median = 0.0000, 99th Percentile = 0.0000
+WARNING:root:Errors Statistics: Total = 0.0000 Average = 0.0000, Median = 0.0000, 99th Percentile = 0.0000
+WARNING:root:Goodput (reqs/s) 0.0000
+WARNING:root:Total requests : 1926
+WARNING:root:Total Duration (s): 63.043487346731126
+WARNING:root:Total tokens generated (toks): 2114730
+WARNING:root:Throughput (end-to-end, toks/s): 33543.988269069814
+INFO:root:========== Benchmark Completed ==========

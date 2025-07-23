@@ -30,7 +30,7 @@ spec:
                 spec:
                   containers:
                     - name: envoy
-                      image: envoyproxy/envoy:v1.33.2
+                      image: aibrix-cn-beijing.cr.volces.com/aibrix/envoy:v1.33.2
                       resources:
                         requests:
                           cpu: 2
@@ -39,6 +39,6 @@ spec:
                           cpu: 2
                           memory: 8Gi
                     - name: shutdown-manager
-                      image: envoyproxy/gateway:v1.2.8
+                      image: aibrix-cn-beijing.cr.volces.com/aibrix/envoy:v1.2.8
       envoyPDB:
         minAvailable: 1
